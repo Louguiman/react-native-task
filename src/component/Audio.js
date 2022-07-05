@@ -25,7 +25,7 @@ const Audio = () => {
           { shouldPlay: false }
         );
         playbackObject.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate);
-        console.log(status);
+
         setIsLoaded(status.isLoaded);
         return setPlaybackStatus(status);
       } catch (error) {
@@ -37,10 +37,13 @@ const Audio = () => {
     }
     return () => {
       setPlaybackObject(null);
+      setPlaybackStatus(null);
+      setIsLoaded(false)
     };
   }, []);
+
   const onPlaybackStatusUpdate = (status) => {
-    if (status.didJustFinish === false) setIsPlaying(false);
+    if (status.didJustFinish === true) setIsPlaying(false);
     setPlaybackStatus(status);
   };
 

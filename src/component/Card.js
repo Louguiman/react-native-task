@@ -1,13 +1,21 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
+
 import Audio from "./Audio";
 import Video from "./Video";
-
 
 const Card = ({ name, createdDate, functionalities }) => {
   return (
     <View style={styles.card}>
-      <View style={[styles.header, { backgroundColor: functionalities === "Audio"? "#cdb4db":"#a2d2ff" }]}>
+      <View
+        style={[
+          styles.header,
+          {
+            backgroundColor:
+              functionalities === "Audio" ? "#cdb4db" : "#a2d2ff",
+          },
+        ]}
+      >
         <Text style={styles.title}>{name && name} </Text>
         <Text style={styles.caption}>{createdDate && createdDate} </Text>
       </View>

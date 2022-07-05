@@ -1,21 +1,20 @@
-import { StyleSheet, Text, View,ImageBackground } from "react-native";
+import { StyleSheet, Text, View, ImageBackground } from "react-native";
 import React from "react";
 import Card from "../component/Card";
 
 const AudioView = () => {
   return (
     <ImageBackground
-    resizeMode="cover"
-    source={require("../../assets/bg-home.png")}
-    style={styles.container}
-  >
+      resizeMode="cover"
+      source={require("../../assets/bg-home.png")}
+      style={styles.container}
+    >
       <Card
         name={"Test Audio Mp3"}
         createdDate={"26-05-2022"}
         functionalities={"Audio"}
       />
     </ImageBackground>
-    
   );
 };
 
