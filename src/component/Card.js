@@ -23,17 +23,17 @@ export default Card;
 
 const styles = StyleSheet.create({
   card: {
-    minHeight: 250,
-    maxHeight: 300,
-    width: width - 10,
+    height:300,
+    width: '95%',
     padding: 10,
     elevation: 5,
     borderRadius: 15,
     backgroundColor: "white",
     shadowOffset: { width: 1, height: 1 },
+    overflow:'hidden'
   },
-  header: { flex:1,flexDirection: "row", justifyContent: "space-between",alignItems: "baseline", },
-  content: { flex:2,alignItems: "center", justifyContent: "center" },
+  header: { flex:1,flexDirection: "row", justifyContent: "space-between",alignItems: "center", },
+  content: { flex:4,alignItems: "center", justifyContent: "center",marginBottom:10 },
   title: {
     fontSize: 20,
     fontWeight: "600",

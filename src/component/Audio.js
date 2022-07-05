@@ -1,62 +1,63 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity,ActivityIndicator } from "react-native";
 import { Audio as AudioPlayer } from "expo-av";
 import { Ionicons } from "@expo/vector-icons";
 
 const Audio = () => {
+  const [isLoaded, setIsLoaded] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false);
-  const [playbackObject, setPlaybackObject] = useState(null);
+  const [playbackObject, setPlaybackObject] = useState(new AudioPlayer.Sound());
   const [playbackStatus, setPlaybackStatus] = useState(null);
 
   useEffect(() => {
-    if (playbackObject === null) {
-      setPlaybackObject(new AudioPlayer.Sound());
-    }
 
-    return () => {
-      setPlaybackObject(null)
-    };
-  }, []);
-
-  const handleAudioPlayPause = async () => {
-    if (playbackObject !== null && playbackStatus === null) {
+    const loadAudio = async () => {
       try {
-        
         const status = await playbackObject.loadAsync(
           {
             uri: "https://btay-videos.s3.ap-southeast-1.amazonaws.com/Videos/Over+the+Horizon.mp3",
           },
-          { shouldPlay: true }
+          { shouldPlay: false }
         );
+        playbackObject.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate) 
         console.log(status);
-        setIsPlaying(true);
+        setIsLoaded(status.isLoaded)
         return setPlaybackStatus(status);
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-    }
+    };
+    loadAudio();
+    return () => {
+      setPlaybackObject(null);
+    };
+  }, []);
+ const onPlaybackStatusUpdate = status => {
+  setPlaybackStatus(status)
+}
+  const handleAudioPlayPause = async () => {
     // It will pause our audio
-    if (playbackStatus.isPlaying) {
+    if (playbackStatus?.isPlaying) {
       try {
-        
         const status = await playbackObject.pauseAsync();
+        console.log(status);
+
         setIsPlaying(false);
         return setPlaybackStatus(status);
       } catch (error) {
-        console.log(error)
-        
+        console.log(error);
       }
     }
 
     // It will resume our audio
-    if (!playbackStatus.isPlaying) {
+    if (!playbackStatus?.isPlaying) {
       try {
-        
         const status = await playbackObject.playAsync();
         setIsPlaying(true);
+
         return setPlaybackStatus(status);
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     }
   };
@@ -70,8 +71,8 @@ const Audio = () => {
           color="black"
         />
       </TouchableOpacity>
-      <TouchableOpacity style={styles.control} onPress={handleAudioPlayPause}>
-        {isPlaying ? (
+      <TouchableOpacity disabled={!isLoaded} style={styles.control} onPress={handleAudioPlayPause}>
+        {!isLoaded?(<ActivityIndicator size="large" />)  : isPlaying ? (
           <Ionicons name="md-pause-circle-outline" size={48} color="black" />
         ) : (
           <Ionicons name="play-circle-outline" size={48} color="black" />
