@@ -1,16 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, TouchableOpacity,ActivityIndicator } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import { Audio as AudioPlayer } from "expo-av";
 import { Ionicons } from "@expo/vector-icons";
 
 const Audio = () => {
-  const [isLoaded, setIsLoaded] = useState(false)
+  const [isLoaded, setIsLoaded] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [playbackObject, setPlaybackObject] = useState(new AudioPlayer.Sound());
   const [playbackStatus, setPlaybackStatus] = useState(null);
 
   useEffect(() => {
-
     const loadAudio = async () => {
       try {
         const status = await playbackObject.loadAsync(
@@ -19,22 +24,26 @@ const Audio = () => {
           },
           { shouldPlay: false }
         );
-        playbackObject.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate) 
+        playbackObject.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate);
         console.log(status);
-        setIsLoaded(status.isLoaded)
+        setIsLoaded(status.isLoaded);
         return setPlaybackStatus(status);
       } catch (error) {
         console.log(error);
       }
     };
-    loadAudio();
+    if (playbackStatus === null) {
+      loadAudio();
+    }
     return () => {
       setPlaybackObject(null);
     };
   }, []);
- const onPlaybackStatusUpdate = status => {
-  setPlaybackStatus(status)
-}
+  const onPlaybackStatusUpdate = (status) => {
+    if (status.didJustFinish === false) setIsPlaying(false);
+    setPlaybackStatus(status);
+  };
+
   const handleAudioPlayPause = async () => {
     // It will pause our audio
     if (playbackStatus?.isPlaying) {
@@ -64,21 +73,27 @@ const Audio = () => {
 
   return (
     <View style={styles.controls}>
-      <TouchableOpacity style={styles.control} onPress={() => alert("")}>
+      <TouchableOpacity style={styles.control} onPress={() => {}}>
         <Ionicons
           name="play-skip-back-circle-outline"
           size={48}
           color="black"
         />
       </TouchableOpacity>
-      <TouchableOpacity disabled={!isLoaded} style={styles.control} onPress={handleAudioPlayPause}>
-        {!isLoaded?(<ActivityIndicator size="large" />)  : isPlaying ? (
+      <TouchableOpacity
+        disabled={!isLoaded}
+        style={styles.control}
+        onPress={handleAudioPlayPause}
+      >
+        {!isLoaded ? (
+          <ActivityIndicator size="large" />
+        ) : isPlaying ? (
           <Ionicons name="md-pause-circle-outline" size={48} color="black" />
         ) : (
           <Ionicons name="play-circle-outline" size={48} color="black" />
         )}
       </TouchableOpacity>
-      <TouchableOpacity style={styles.control} onPress={() => alert("")}>
+      <TouchableOpacity style={styles.control} onPress={() => {}}>
         <Ionicons
           name="play-skip-forward-circle-outline"
           size={48}
