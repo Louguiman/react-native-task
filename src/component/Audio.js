@@ -29,7 +29,7 @@ const Audio = () => {
         setIsLoaded(status.isLoaded);
         return setPlaybackStatus(status);
       } catch (error) {
-        console.log(error);
+        //console.log(error);
       }
     };
     if (playbackStatus === null) {
@@ -52,12 +52,12 @@ const Audio = () => {
     if (playbackStatus?.isPlaying) {
       try {
         const status = await playbackObject.pauseAsync();
-        console.log(status);
+        //console.log(status);
 
         setIsPlaying(false);
         return setPlaybackStatus(status);
       } catch (error) {
-        console.log(error);
+        //console.log(error);
       }
     }
 
@@ -69,7 +69,7 @@ const Audio = () => {
 
         return setPlaybackStatus(status);
       } catch (error) {
-        console.log(error);
+        //console.log(error);
       }
     }
   };
